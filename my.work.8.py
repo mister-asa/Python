@@ -46,53 +46,66 @@ print(Data.valid(1, 11, 2000))
 
 
 # 2
-class MyException(Exception):
-
-    def division_func(self, a, b):
-        try:
-            res = round(a / b, 2)
-        except ZeroDivisionError:
-            print(f"{a} / {b} -> на ноль делить нельзя!\n")
-        else:
-            print(f"{a} / {b} = {res} \n")
+class CustomZeroDivisionError(Exception):
+    pass
 
 
-m_e = MyException()
+def get_numerator() -> int:
+    return int(input("Введите числитель >>> "))
 
-m_e.division_func(1, 2)
-m_e.division_func(1, 0)
-m_e.division_func(-1, 3)
-m_e.division_func(0, 4)
+
+def get_denominator() -> int:
+    value = int(input("Введите знаменатель >>> "))
+
+    if value == 0:
+        raise CustomZeroDivisionError
+
+    return value
+
+
+while True:
+    try:
+        numerator = get_numerator()
+        denominator = get_denominator()
+
+        print(f"Результат = {numerator / denominator}")
+    except CustomZeroDivisionError:
+        print("Вы ввели 0 в качестве знаменателя, так не пойдет")
+    except KeyboardInterrupt:
+        break
 
 
 
 
 # 3
-class OwnError(Exception):
+class Error:
+    def __init__(self, *args):
+        self.my_list = []
 
-    def func_str(self, my_list):
-        try:
-            for el in my_list:
-                if type(el) == str:
-                    raise OwnError("в списке присутствует элемент типа данных <<str>>: ")
+    def my_input(self):
 
-        except OwnError as err:
-            print(err, el)
+        # self.my_list = [int(i) for i in input('Введите значения через пробел ').split()]
+        # val = int(input('Введите значения и нажимайте Enter - '))
+        # self.my_list.append(val)
+        while True:
+            try:
+                val = int(input('Введите значения и нажимайте Enter - '))
+                self.my_list.append(val)
+                print(f'Текущий список - {self.my_list} \n ')
+            except:
+                print(f"Недопустимое значение - строка и булево")
+                y_or_n = input(f'Попробовать еще раз? Y/N ')
 
-    def func_bool(self, my_list):
-        try:
-            for el in my_list:
-                if type(el) == bool:
-                    raise OwnError("в списке присутствует элемент типа данных <<bool>>: ")
-        except OwnError as err:
-            print(err, el)
+                if y_or_n == 'Y' or y_or_n == 'y':
+                    print(try_except.my_input())
+                elif y_or_n == 'N' or y_or_n == 'n':
+                    return f'Вы вышли'
+                else:
+                    return f'Вы вышли'
 
 
-input_list = [2, 1.2, 'str-элемент', bool(20)]
-print("Введенный список: ", input_list, "\n")
-my_err = OwnError()
-my_err.func_str(input_list)
-my_err.func_bool(input_list)
+try_except = Error(1)
+print(try_except.my_input())
 
 
 
@@ -236,5 +249,3 @@ print(f"{z1} * {z2} = ", z1 * z2)
 # проверка
 # print(complex(1, 2)+complex(2, 3))
 # print(complex(1, 2)*complex(2, 3))
-
-
